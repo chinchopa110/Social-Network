@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Инициализация</title>
+</head>
+<body>
+    <h1>Выберите действие</h1>
+    <a href="/login">Войти</a>
+    <a href="/register">Зарегистрироваться</a>
+
+    <h2>Пользователи:</h2>
+    <ul>
+        <li th:each="user : ${users}">
+            <a th:href="@{notinit/user/{id}(id=${user.Id})}" th:text="${user.Name}"></a>
+        </li>
+    </ul>
+</body>
+</html>

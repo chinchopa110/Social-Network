@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Дневник пользователя</title>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+<h1>Дневник пользователя: <span th:text="${userName}"></span></h1>
+
+<h2>Записи:</h2>
+<ul>
+    <li th:each="post : ${diary}">
+        <h3 th:text="${post.title}"></h3>
+        <p th:text="'Дата: ' + ${post.date}"></p>
+        <p th:text="${post.message}"></p>
+    </li>
+</ul>
+
+<button onclick="goBack()">Назад</button>
+</body>
+</html>

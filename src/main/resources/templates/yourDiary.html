@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваш дневник</title>
+</head>
+<body>
+    <h1>Ваш дневник:</h1>
+    <a href="/initapp">Вернуться на главную</a>
+
+    <h2>Записи:</h2>
+    <ul>
+        <li th:each="post, iterStat : ${diary}">
+            <h3 th:text="${post.title}"></h3>
+            <p th:text="'Дата: ' + ${post.date}"></p>
+            <p th:text="${post.message}"></p>
+            <form th:action="@{/removePost}" method="post">
+                <input type="hidden" th:value="${iterStat.index}" name="postIndex"/>
+                <button type="submit">Удалить</button>
+            </form>
+        </li>
+    </ul>
+
+    <h2>Добавить новую запись:</h2>
+    <form action="/addPost" method="post">
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="title" required/>
+
+        <label for="message">Сообщение:</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit">Добавить запись</button>
+    </form>
+</body>
+</html>

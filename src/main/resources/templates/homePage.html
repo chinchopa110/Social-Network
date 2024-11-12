@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+<body>
+<h1>Ваш дневник:</h1>
+<a href="/yourDiary">Дневник</a>
+
+<h2>Дневники пользователей:</h2>
+<ul>
+    <li th:each="user : ${users}" th:if="${user.Id} != ${myProfile.Id}">
+        <a th:href="@{init/user/{id}(id=${user.Id})}" th:text="${user.Name}"></a>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Регистрация</title>
+</head>
+<body>
+<h1>Регистрация</h1>
+<form action="#" th:action="@{/register}" method="post">
+  <label for="name">Имя:</label>
+  <input type="text" id="name" name="name" required />
+
+  <label for="password">Пароль:</label>
+  <input type="password" id="password" name="password" required />
+
+  <button type="submit">Зарегистрироваться</button>
+</form>
+
+<a href="/notinitapp">Назад</a>
+</body>
+</html>
