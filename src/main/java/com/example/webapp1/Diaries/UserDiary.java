@@ -1,24 +1,31 @@
 package com.example.webapp1.Diaries;
 
-import com.example.webapp1.Diaries.Posts.IPost;
+import com.example.webapp1.Diaries.Posts.UserPost;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class UserDiary implements IDiary {
-    private final List<IPost> posts;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private final List<UserPost> posts;
 
     public UserDiary() {
         this.posts = new ArrayList<>();
     }
 
     @Override
-    public List<IPost> getPosts() {
+    public List<UserPost> getPosts() {
         return posts;
     }
 
     @Override
-    public void addPost(IPost post) {
+    public void addPost(UserPost post) {
         this.posts.add(post);
     }
 
@@ -27,5 +34,9 @@ public class UserDiary implements IDiary {
         if (ind >= 0 && ind < posts.size()) {
             this.posts.remove(ind);
         }
+    }
+
+    public int getId() {
+        return id;
     }
 }

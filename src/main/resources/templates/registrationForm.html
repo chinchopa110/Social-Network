@@ -6,6 +6,11 @@
 </head>
 <body>
 <h1>Регистрация</h1>
+
+<div th:if="${error}" style="color: red;">
+  <p th:text="${error}"></p>
+</div>
+
 <form action="#" th:action="@{/register}" method="post">
   <label for="name">Имя:</label>
   <input type="text" id="name" name="name" required />

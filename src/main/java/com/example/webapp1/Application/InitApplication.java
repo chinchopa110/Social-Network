@@ -1,27 +1,29 @@
 package com.example.webapp1.Application;
 
-import com.example.webapp1.Diaries.Posts.IPost;
+import com.example.webapp1.Repos.IUserData;
 import com.example.webapp1.Diaries.Posts.UserPost;
 import com.example.webapp1.Users.MyProfile;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import com.example.webapp1.Data.UserData;
-import com.example.webapp1.Users.User;
+import com.example.webapp1.Users.Domain.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 public class InitApplication implements IApplication {
 
-    private User findUserById(UserData userData, int userId) {
-        for (User user : userData.GetAll()) {
-            if (user.Id == userId) {
+    @Autowired
+    private IUserData _userData;
+
+    private User findUserById(int userId) {
+        for (User user : _userData.findAll()) {
+            if (user.getId() == userId) {
                 return user;
             }
         }
@@ -31,9 +33,8 @@ public class InitApplication implements IApplication {
     @GetMapping("/initapp")
     public String Show(Model model, HttpSession session) {
         MyProfile myProfile = (MyProfile) session.getAttribute("myProfile");
-        UserData userData = (UserData) session.getAttribute("_userData");
 
-        List<User> users = userData.GetAll();
+        Iterable<User> users = _userData.findAll();
         model.addAttribute("users", users);
         model.addAttribute("myProfile", myProfile);
         return "homePage";
@@ -42,17 +43,16 @@ public class InitApplication implements IApplication {
     @PostMapping("/addPost")
     public String addPost(@RequestParam String title, @RequestParam String message, HttpSession session) {
         MyProfile myProfile = (MyProfile) session.getAttribute("myProfile");
-        UserData _userData = (UserData) session.getAttribute("_userData");
 
         if (myProfile != null) {
             String date = LocalDate.now().toString();
-            IPost newPost = new UserPost(title, date, message);
+            UserPost newPost = new UserPost(title, date, message);
             myProfile.Diary.addPost(newPost);
 
-            User user = findUserById(_userData, myProfile.Id);
+            User user = findUserById(myProfile.Id);
             if (user != null) {
                 user.Diary.addPost(newPost);
-                _userData.Update(user);
+                _userData.save(user);
             }
 
             return "redirect:/yourDiary";
@@ -64,15 +64,14 @@ public class InitApplication implements IApplication {
     @PostMapping("/removePost")
     public String removePost(@RequestParam int postIndex, HttpSession session) {
         MyProfile myProfile = (MyProfile) session.getAttribute("myProfile");
-        UserData _userData = (UserData) session.getAttribute("_userData");
 
         if (myProfile != null) {
-            User user = findUserById(_userData, myProfile.Id);
+            User user = findUserById(myProfile.Id);
             if (user != null) {
                 if (postIndex >= 0 && postIndex < myProfile.Diary.getPosts().size() && postIndex < user.Diary.getPosts().size()) {
                     myProfile.Diary.removePost(postIndex);
                     user.Diary.removePost(postIndex);
-                    _userData.Update(user);
+                    _userData.save(user);
                 }
                 return "redirect:/yourDiary";
             }
@@ -95,13 +94,12 @@ public class InitApplication implements IApplication {
     }
 
     @GetMapping("init/user/{id}")
-    public String ShowUserDiary(@PathVariable int id, Model model, HttpSession session) {
-        UserData userData = (UserData) session.getAttribute("_userData");
-        User user = findUserById(userData, id);
+    public String ShowUserDiary(@PathVariable int id, Model model) {
+        User user = findUserById(id);
 
         if (user != null) {
-            model.addAttribute("diary", user.Diary.getPosts());
-            model.addAttribute("userName", user.Name);
+            model.addAttribute("diary", user.getDiary().getPosts());
+            model.addAttribute("userName", user.getName());
         } else {
             model.addAttribute("error", "Пользователь не найден.");
         }
