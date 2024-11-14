@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import com.example.webapp1.Users.Domain.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -21,7 +18,7 @@ public class InitApplication implements IApplication {
     @Autowired
     private IUserData _userData;
 
-    private User findUserById(int userId) {
+    private User findUserById(long userId) {
         for (User user : _userData.findAll()) {
             if (user.getId() == userId) {
                 return user;
@@ -100,9 +97,35 @@ public class InitApplication implements IApplication {
         if (user != null) {
             model.addAttribute("diary", user.getDiary().getPosts());
             model.addAttribute("userName", user.getName());
+            model.addAttribute("user", user);
         } else {
             model.addAttribute("error", "Пользователь не найден.");
         }
-        return "userDiary";
+        return "userDiaryInit";
+    }
+
+    //TODO: после обновления не менять порядок записей
+    @PostMapping("/likePost")
+    public String likePost(@RequestParam Long postId, @RequestParam Long userId) {
+        User user = findUserById(userId);
+        if (user != null) {
+            user.Diary.likeDiaryPost(postId, user);
+            _userData.save(user);
+            return "redirect:/init/user/" + user.getId();
+        } else {
+            return "redirect:/homePage";
+        }
+    }
+
+    @PostMapping("/unlikePost")
+    public String unlikePost(@RequestParam Long postId, @RequestParam Long userId) {
+        User user = findUserById(userId);
+        if (user != null) {
+            user.Diary.unlikeDiaryPost(postId, user);
+            _userData.save(user);
+            return "redirect:/init/user/" + user.getId();
+        } else {
+            return "redirect:/homePage";
+        }
     }
 }

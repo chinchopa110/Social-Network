@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Дневник пользователя</title>
+</head>
+<body>
+<h1>Дневник пользователя: <span th:text="${userName}"></span></h1>
+
+<h2>Записи:</h2>
+<ul>
+    <li th:each="post, iterStat : ${diary}">
+        <h3 th:text="${post.title}"></h3>
+        <p th:text="'Дата: ' + ${post.date}"></p>
+        <p th:text="${post.message}"></p>
+        <p th:text="${post.likesCount}"></p>
+
+        <form th:action="@{/likePost}" method="post">
+            <input type="hidden" th:name="postId" th:value="${post.id}"/>
+            <input type="hidden" th:name="userId" th:value="${user.id}"/>
+            <button type="submit">Лайк</button>
+        </form>
+
+        <form th:action="@{/unlikePost}" method="post">
+            <input type="hidden" th:name="postId" th:value="${post.id}"/>
+            <input type="hidden" th:name="userId" th:value="${user.id}"/>
+            <button type="submit">Убрать лайк</button>
+        </form>
+
+    </li>
+</ul>
+
+<a href="/initapp">Назад</a>
+</body>
+</html>

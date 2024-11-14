@@ -10,8 +10,8 @@
 
 <h2>Дневники пользователей:</h2>
 <ul>
-    <li th:each="user : ${users}" th:if="${user.Id} != ${myProfile.Id}">
-        <a th:href="@{init/user/{id}(id=${user.Id})}" th:text="${user.Name}"></a>
+    <li th:each="user : ${users}" th:if="${user.id} != ${myProfile.Id}">
+        <a th:href="@{init/user/{id}(id=${user.id})}" th:text="${user.Name}"></a>
     </li>
 </ul>
 </body>

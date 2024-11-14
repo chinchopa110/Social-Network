@@ -1,6 +1,7 @@
 package com.example.webapp1.Diaries;
 
 import com.example.webapp1.Diaries.Posts.UserPost;
+import com.example.webapp1.Users.Domain.User;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -38,5 +39,28 @@ public class UserDiary implements IDiary {
 
     public int getId() {
         return id;
+    }
+
+    public void likeDiaryPost(Long postId, User user) {
+        UserPost post = findPostById(postId);
+        if (post != null) {
+            post.likePost(user);
+        }
+    }
+
+    public void unlikeDiaryPost(Long postId, User user) {
+        UserPost post = findPostById(postId);
+        if (post != null) {
+            post.unlikePost(user);
+        }
+    }
+
+    private UserPost findPostById(Long postId) {
+        for (UserPost post : posts) {
+            if (post.getId() == postId) {
+                return post;
+            }
+        }
+        return null;
     }
 }

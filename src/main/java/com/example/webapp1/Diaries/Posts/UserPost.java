@@ -1,10 +1,12 @@
 package com.example.webapp1.Diaries.Posts;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.webapp1.Response.UserLike;
+import com.example.webapp1.Users.Domain.User;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class UserPost implements IPost {
@@ -15,16 +17,34 @@ public class UserPost implements IPost {
     private final String date;
     private final String message;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private final List<UserLike> likes;
+
+    @Column(name = "likes_count", nullable = false)
+    private int likesCount;
+
     public UserPost() {
-        title = null;
-        date = null;
-        message = null;
+        this.title = null;
+        this.date = null;
+        this.message = null;
+        this.likes = new ArrayList<>();
+        this.likesCount = 0;
     }
 
     public UserPost(String title, String date, String message) {
         this.title = title;
         this.date = date;
         this.message = message;
+        this.likes = new ArrayList<>();
+        this.likesCount = 0;
+    }
+
+    public UserPost(String title, String date, String message, List<UserLike> likes) {
+        this.title = title;
+        this.date = date;
+        this.message = message;
+        this.likes = likes;
+        this.likesCount = likes.size();
     }
 
     @Override
@@ -40,5 +60,29 @@ public class UserPost implements IPost {
     @Override
     public String getMessage() {
         return message;
+    }
+
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void likePost(User user) {
+        for (UserLike userLike : likes) {
+            if (userLike.getUser().equals(user)) {
+                return;
+            }
+        }
+        UserLike userLike = new UserLike(user);
+        likes.add(userLike);
+        likesCount = likes.size();
+    }
+
+    public void unlikePost(User user) {
+        likes.removeIf(userLike -> userLike.getUser().equals(user));
+        likesCount = likes.size();
+    }
+
+    public int getId() {
+        return id;
     }
 }

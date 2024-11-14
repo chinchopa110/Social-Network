@@ -41,6 +41,6 @@ public class NotInitApplication implements IApplication
         } else {
             model.addAttribute("error", "Пользователь не найден.");
         }
-        return "userDiary";
+        return "userDiaryNotInit";
     }
 }
