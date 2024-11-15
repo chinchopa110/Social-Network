@@ -43,4 +43,6 @@ public class NotInitApplication implements IApplication
         }
         return "userDiaryNotInit";
     }
+
+    //TODO комменты
 }

@@ -10,10 +10,6 @@ import org.springframework.ui.Model;
 import com.example.webapp1.Users.Domain.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 @Controller
 public class InitApplication implements IApplication {
 
@@ -44,11 +40,7 @@ public class InitApplication implements IApplication {
         MyProfile myProfile = (MyProfile) session.getAttribute("myProfile");
 
         if (myProfile != null) {
-            String date = LocalDate.now().toString();
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            String time = LocalTime.now().format(timeFormatter);
-
-            UserPost newPost = new UserPost(title, date, time, message);
+            UserPost newPost = new UserPost(title, message);
             myProfile.Diary.addPost(newPost);
 
             User user = findUserById(myProfile.Id);
@@ -132,4 +124,6 @@ public class InitApplication implements IApplication {
             return "redirect:/homePage";
         }
     }
+
+    //TODO комменты ты помнишь что сделать
 }

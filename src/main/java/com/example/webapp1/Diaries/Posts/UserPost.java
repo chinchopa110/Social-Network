@@ -3,9 +3,13 @@ package com.example.webapp1.Diaries.Posts;
 
 import com.example.webapp1.Diaries.Posts.Response.UserComment;
 import com.example.webapp1.Diaries.Posts.Response.UserLike;
+import com.example.webapp1.Diaries.Posts.UserPostService.UserPostComparator;
 import com.example.webapp1.Users.Domain.User;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +37,8 @@ public class UserPost implements IPost {
 
     public UserPost() {
         this.title = null;
-        this.date = null;
-        this.time = null;
+        this.date = LocalDate.now().toString();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.message = null;
         this.likes = new ArrayList<>();
         this.comments = new ArrayList<>();
@@ -42,10 +46,10 @@ public class UserPost implements IPost {
         this.commentsCount = 0;
     }
 
-    public UserPost(String title, String date, String time, String message) {
+    public UserPost(String title, String message) {
         this.title = title;
-        this.date = date;
-        this.time = time;
+        this.date = LocalDate.now().toString();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.message = message;
         this.likes = new ArrayList<>();
         this.comments = new ArrayList<>();
@@ -53,10 +57,10 @@ public class UserPost implements IPost {
         this.commentsCount = 0;
     }
 
-    public UserPost(String title, String date,String time, String message, List<UserLike> likes, List<UserComment> comments) {
+    public UserPost(String title, String message, List<UserLike> likes, List<UserComment> comments) {
         this.title = title;
-        this.date = date;
-        this.time = time;
+        this.date = LocalDate.now().toString();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.message = message;
         this.likes = likes;
         this.comments = comments;
@@ -117,5 +121,17 @@ public class UserPost implements IPost {
             likes.removeIf(userLike -> userLike.getUser().equals(user));
             likesCount = likes.size();
         }
+    }
+
+    public void addComment(User user, String comment) {
+        comments.add(new UserComment(user, comment));
+    }
+
+    public List<UserComment> getComments() {
+        List<UserComment> sortedComments = comments;
+
+        sortedComments.sort(new UserPostComparator());
+
+        return sortedComments;
     }
 }

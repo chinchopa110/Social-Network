@@ -4,6 +4,9 @@ import com.example.webapp1.Diaries.Posts.IPost;
 import com.example.webapp1.Users.Domain.User;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class UserComment implements IResponse, IPost {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User _user;
+    private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
     private final List<UserLike> likes;
@@ -27,34 +30,34 @@ public class UserComment implements IResponse, IPost {
     private int likesCount;
 
     public UserComment() {
-        this.date = null;
-        this.time = null;
+        this.date = LocalDate.now().toString();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.message = null;
-        this._user = new User();
+        this.user = new User();
         this.likes = new ArrayList<>();
         this.likesCount = 0;
     }
 
-    public UserComment(User _user, String date, String time, String message) {
-        this._user = _user;
-        this.date = date;
-        this.time = time;
+    public UserComment(User _user,  String message) {
+        this.user = _user;
+        this.date = LocalDate.now().toString();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.message = message;
         this.likes = new ArrayList<>();
         this.likesCount = 0;
     }
 
-    public UserComment(User _user, String date, String time, String message, ArrayList<UserLike> likes) {
-        this._user = _user;
-        this.date = date;
-        this.time = time;
+    public UserComment(User _user,  String message, ArrayList<UserLike> likes) {
+        this.user = _user;
+        this.date = LocalDate.now().toString();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.message = message;
         this.likes = likes;
         this.likesCount = likes.size();
     }
 
     public User getUser() {
-        return _user;
+        return user;
     }
 
     @Override
