@@ -1,9 +1,9 @@
 package com.example.webapp1.Diaries;
 
 import com.example.webapp1.Diaries.Posts.UserPost;
+import com.example.webapp1.Diaries.Posts.UserPostService.UserPostComparator;
 import com.example.webapp1.Users.Domain.User;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +22,14 @@ public class UserDiary implements IDiary {
 
     @Override
     public List<UserPost> getPosts() {
-        return posts;
+        List<UserPost> sortedPosts = new ArrayList<>(posts);
+
+        sortedPosts.sort(new UserPostComparator());
+
+        return sortedPosts;
     }
+
+
 
     @Override
     public void addPost(UserPost post) {
@@ -44,14 +50,18 @@ public class UserDiary implements IDiary {
     public void likeDiaryPost(Long postId, User user) {
         UserPost post = findPostById(postId);
         if (post != null) {
-            post.likePost(user);
+            if (!post.hasLiked(user)) {
+                post.likePost(user);
+            }
         }
     }
 
     public void unlikeDiaryPost(Long postId, User user) {
         UserPost post = findPostById(postId);
         if (post != null) {
-            post.unlikePost(user);
+            if (post.hasLiked(user)) {
+                post.unlikePost(user);
+            }
         }
     }
 

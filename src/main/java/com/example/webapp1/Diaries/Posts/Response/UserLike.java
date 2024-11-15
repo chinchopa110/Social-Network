@@ -1,10 +1,10 @@
-package com.example.webapp1.Response;
+package com.example.webapp1.Diaries.Posts.Response;
 
 import com.example.webapp1.Users.Domain.User;
 import jakarta.persistence.*;
 
 @Entity
-public class UserLike {
+public class UserLike implements IResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

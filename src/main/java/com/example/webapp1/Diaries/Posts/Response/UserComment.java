@@ -1,8 +1,6 @@
-package com.example.webapp1.Diaries.Posts;
+package com.example.webapp1.Diaries.Posts.Response;
 
-
-import com.example.webapp1.Diaries.Posts.Response.UserComment;
-import com.example.webapp1.Diaries.Posts.Response.UserLike;
+import com.example.webapp1.Diaries.Posts.IPost;
 import com.example.webapp1.Users.Domain.User;
 import jakarta.persistence.*;
 
@@ -10,90 +8,76 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class UserPost implements IPost {
+public class UserComment implements IResponse, IPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private final String title;
     private final String date;
     private final String time;
     private final String message;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User _user;
+
     @OneToMany(cascade = CascadeType.ALL)
     private final List<UserLike> likes;
 
-    @Column(name = "likes_count", nullable = false)
+    @Column(name = "comment_likes_count", nullable = false)
     private int likesCount;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private final List<UserComment> comments;
-
-    @Column(name = "comment_count", nullable = false)
-    private int commentsCount;
-
-    public UserPost() {
-        this.title = null;
+    public UserComment() {
         this.date = null;
         this.time = null;
         this.message = null;
+        this._user = new User();
         this.likes = new ArrayList<>();
-        this.comments = new ArrayList<>();
         this.likesCount = 0;
-        this.commentsCount = 0;
     }
 
-    public UserPost(String title, String date, String time, String message) {
-        this.title = title;
+    public UserComment(User _user, String date, String time, String message) {
+        this._user = _user;
         this.date = date;
         this.time = time;
         this.message = message;
         this.likes = new ArrayList<>();
-        this.comments = new ArrayList<>();
         this.likesCount = 0;
-        this.commentsCount = 0;
     }
 
-    public UserPost(String title, String date,String time, String message, List<UserLike> likes, List<UserComment> comments) {
-        this.title = title;
+    public UserComment(User _user, String date, String time, String message, ArrayList<UserLike> likes) {
+        this._user = _user;
         this.date = date;
         this.time = time;
         this.message = message;
         this.likes = likes;
-        this.comments = comments;
         this.likesCount = likes.size();
-        this.commentsCount = comments.size();
     }
 
-    public String getTitle() {
-        return title;
+    public User getUser() {
+        return _user;
     }
 
     @Override
-    public String getDate() {
+    public String getDate(){
         return date;
     }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
     @Override
     public String getTime(){
         return time;
     }
-
     @Override
-    public int getLikesCount() {
+    public String getMessage(){
+        return message;
+    }
+    @Override
+    public int getLikesCount(){
         return likesCount;
     }
-
     @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public boolean hasLiked(User user) {
         for (UserLike userLike : likes) {
             if (userLike != null && userLike.getUser() != null && userLike.getUser().equals(user)) {
@@ -103,7 +87,6 @@ public class UserPost implements IPost {
         return false;
     }
 
-    @Override
     public void likePost(User user) {
         if (user != null) {
             likes.add(new UserLike(user));
@@ -111,7 +94,6 @@ public class UserPost implements IPost {
         }
     }
 
-    @Override
     public void unlikePost(User user) {
         if (user != null) {
             likes.removeIf(userLike -> userLike.getUser().equals(user));

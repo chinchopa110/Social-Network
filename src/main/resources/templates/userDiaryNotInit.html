@@ -12,6 +12,7 @@
     <li th:each="post : ${diary}">
         <h3 th:text="${post.title}"></h3>
         <p th:text="'Дата: ' + ${post.date}"></p>
+        <p th:text="'Время: ' + ${post.time}"></p>
         <p th:text="${post.message}"></p>
         <p th:text="${post.likesCount}"></p>
     </li>

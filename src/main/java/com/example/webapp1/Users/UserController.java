@@ -39,7 +39,7 @@ public class UserController {
                         .setName(name)
                         .setPassword(HashPassword.Hash(password))
                         .setId(user.getId())
-                        .setDiary(user.Diary)
+                        .setDiary(user.getDiary())
                         .build();
 
                 session.setAttribute("myProfile", myProfile);

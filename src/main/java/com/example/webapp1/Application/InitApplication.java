@@ -11,6 +11,8 @@ import com.example.webapp1.Users.Domain.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 public class InitApplication implements IApplication {
@@ -43,12 +45,15 @@ public class InitApplication implements IApplication {
 
         if (myProfile != null) {
             String date = LocalDate.now().toString();
-            UserPost newPost = new UserPost(title, date, message);
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            String time = LocalTime.now().format(timeFormatter);
+
+            UserPost newPost = new UserPost(title, date, time, message);
             myProfile.Diary.addPost(newPost);
 
             User user = findUserById(myProfile.Id);
             if (user != null) {
-                user.Diary.addPost(newPost);
+                user.getDiary().addPost(newPost);
                 _userData.save(user);
             }
 
@@ -65,9 +70,9 @@ public class InitApplication implements IApplication {
         if (myProfile != null) {
             User user = findUserById(myProfile.Id);
             if (user != null) {
-                if (postIndex >= 0 && postIndex < myProfile.Diary.getPosts().size() && postIndex < user.Diary.getPosts().size()) {
+                if (postIndex >= 0 && postIndex < myProfile.Diary.getPosts().size() && postIndex < user.getDiary().getPosts().size()) {
                     myProfile.Diary.removePost(postIndex);
-                    user.Diary.removePost(postIndex);
+                    user.getDiary().removePost(postIndex);
                     _userData.save(user);
                 }
                 return "redirect:/yourDiary";
@@ -104,12 +109,11 @@ public class InitApplication implements IApplication {
         return "userDiaryInit";
     }
 
-    //TODO: после обновления не менять порядок записей
     @PostMapping("/likePost")
     public String likePost(@RequestParam Long postId, @RequestParam Long userId) {
         User user = findUserById(userId);
         if (user != null) {
-            user.Diary.likeDiaryPost(postId, user);
+            user.getDiary().likeDiaryPost(postId, user);
             _userData.save(user);
             return "redirect:/init/user/" + user.getId();
         } else {
@@ -121,7 +125,7 @@ public class InitApplication implements IApplication {
     public String unlikePost(@RequestParam Long postId, @RequestParam Long userId) {
         User user = findUserById(userId);
         if (user != null) {
-            user.Diary.unlikeDiaryPost(postId, user);
+            user.getDiary().unlikeDiaryPost(postId, user);
             _userData.save(user);
             return "redirect:/init/user/" + user.getId();
         } else {

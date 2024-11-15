@@ -17,7 +17,7 @@ public class DatabaseUpdater {
         try (Connection conn = DriverManager.getConnection(url, user, password);
              Statement stmt = conn.createStatement()) {
 
-            stmt.executeUpdate("ALTER TABLE user_like DROP COLUMN _liked;");
+            stmt.executeUpdate("ALTER TABLE user_post ADD COLUMN comment_count INT NOT NULL DEFAULT 0;");
 
             System.out.println("Столбец likes_count успешно добавлен.");
         } catch (SQLException e) {

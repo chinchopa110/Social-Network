@@ -15,7 +15,7 @@ public class User {
     private String Name;
 
     @OneToOne(cascade = CascadeType.ALL)
-    public UserDiary Diary;
+    private UserDiary Diary;
 
     public User() {
         this._passwordHash = "";
@@ -27,9 +27,7 @@ public class User {
         this.Diary = builder.diary;
     }
 
-    public UserDiary getDiary() {
-        return Diary;
-    }
+    public UserDiary getDiary() { return Diary; }
 
     public String getPasswordHash() {
         return _passwordHash;
