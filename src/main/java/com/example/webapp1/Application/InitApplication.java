@@ -125,5 +125,5 @@ public class InitApplication implements IApplication {
         }
     }
 
-    //TODO комменты ты помнишь что сделать
+    //TODO комменты
 }
