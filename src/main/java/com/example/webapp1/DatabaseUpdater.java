@@ -17,9 +17,13 @@ public class DatabaseUpdater {
         try (Connection conn = DriverManager.getConnection(url, user, password);
              Statement stmt = conn.createStatement()) {
 
-            stmt.executeUpdate("ALTER TABLE user_post ADD COLUMN comment_count INT NOT NULL DEFAULT 0;");
-
-            System.out.println("Столбец likes_count успешно добавлен.");
+            stmt.executeUpdate("ALTER TABLE user_comment ALTER COLUMN id SET DATA TYPE bigint;\n" +
+                    "ALTER TABLE user_comment_likes ALTER COLUMN user_comment_id SET DATA TYPE bigint;\n" +
+                    "ALTER TABLE user_diary_posts ALTER COLUMN posts_id SET DATA TYPE bigint;\n" +
+                    "ALTER TABLE user_post ALTER COLUMN id SET DATA TYPE bigint;\n" +
+                    "ALTER TABLE user_post_comments ALTER COLUMN user_post_id SET DATA TYPE bigint;\n" +
+                    "ALTER TABLE user_post_comments ALTER COLUMN comments_id SET DATA TYPE bigint;\n" +
+                    "ALTER TABLE user_post_likes ALTER COLUMN user_post_id SET DATA TYPE bigint;");
         } catch (SQLException e) {
             e.printStackTrace();
         }

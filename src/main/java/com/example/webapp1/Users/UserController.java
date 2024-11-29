@@ -46,6 +46,7 @@ public class UserController {
 
                 model.addAttribute("message", "Добро пожаловать, " + name + "!");
                 model.addAttribute("diary", myProfile.Diary.getPosts());
+                model.addAttribute("MyId", myProfile.Id);
                 return "yourDiary";
             }
         }

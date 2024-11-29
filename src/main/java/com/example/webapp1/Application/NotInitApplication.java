@@ -1,5 +1,7 @@
 package com.example.webapp1.Application;
 
+import com.example.webapp1.Diaries.Posts.UserPost;
+import com.example.webapp1.Diaries.UserDiary;
 import com.example.webapp1.Repos.IUserData;
 import com.example.webapp1.Users.Domain.User;
 import jakarta.servlet.http.HttpSession;
@@ -38,11 +40,31 @@ public class NotInitApplication implements IApplication
         if (user != null) {
             model.addAttribute("diary", user.getDiary().getPosts());
             model.addAttribute("userName", user.getName());
+            model.addAttribute("userId", user.getId());
         } else {
             model.addAttribute("error", "Пользователь не найден.");
         }
         return "userDiaryNotInit";
     }
 
-    //TODO комменты
+    @GetMapping("notinit/user/{id}/comm/{postId}")
+    public String showUserComment(@PathVariable int id, @PathVariable long postId, Model model) {
+        User user = findUserById(id);
+
+        if (user != null) {
+            UserDiary userDiary = user.getDiary();
+            UserPost post = userDiary.findPostById(postId);
+
+            if (post != null) {
+                model.addAttribute("comments", post.getComments());
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("error", "Пост не найден.");
+            }
+        } else {
+            model.addAttribute("error", "Пользователь не найден.");
+        }
+
+        return "userCommentNotInit";
+    }
 }

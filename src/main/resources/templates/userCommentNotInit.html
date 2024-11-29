@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Комментарии</title>
+</head>
+<body>
+<h2>Комментарии:</h2>
+<ul>
+  <li th:each="comm : ${comments}">
+    <h3 th:text="${comm.getUser().getName()}"></h3>
+    <p th:text="'Дата: ' + ${comm.date}"></p>
+    <p th:text="'Время: ' + ${comm.time}"></p>
+    <p th:text="${comm.message}"></p>
+    <p th:text="'Лайки: ' + ${comm.likesCount}"></p>
+  </li>
+</ul>
+
+<a th:href="@{/notinit/user/{id}(id=${user.id})}">Назад</a>
+</body>
+</html>

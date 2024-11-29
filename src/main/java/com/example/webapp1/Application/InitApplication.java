@@ -1,5 +1,6 @@
 package com.example.webapp1.Application;
 
+import com.example.webapp1.Diaries.UserDiary;
 import com.example.webapp1.Repos.IUserData;
 import com.example.webapp1.Diaries.Posts.UserPost;
 import com.example.webapp1.Users.MyProfile;
@@ -80,6 +81,7 @@ public class InitApplication implements IApplication {
         if (myProfile != null) {
             model.addAttribute("diary", myProfile.Diary.getPosts());
             model.addAttribute("userName", myProfile.Name);
+            model.addAttribute("MyId", myProfile.Id);
             return "yourDiary";
         } else {
             model.addAttribute("error", "Пожалуйста, войдите в систему.");
@@ -95,6 +97,7 @@ public class InitApplication implements IApplication {
             model.addAttribute("diary", user.getDiary().getPosts());
             model.addAttribute("userName", user.getName());
             model.addAttribute("user", user);
+            model.addAttribute("userId", user.getId());
         } else {
             model.addAttribute("error", "Пользователь не найден.");
         }
@@ -125,5 +128,81 @@ public class InitApplication implements IApplication {
         }
     }
 
-    //TODO комменты
+    @GetMapping("init/user/{id}/comm/{postId}")
+    public String showUserComment(@PathVariable int id, @PathVariable long postId, Model model) {
+        User user = findUserById(id);
+
+        if (user != null) {
+            UserDiary userDiary = user.getDiary();
+            UserPost post = userDiary.findPostById(postId);
+
+            if (post != null) {
+                model.addAttribute("comments", post.getComments());
+                model.addAttribute("user", user);
+                model.addAttribute("postId", postId);
+            } else {
+                model.addAttribute("error", "Пост не найден.");
+            }
+        } else {
+            model.addAttribute("error", "Пользователь не найден.");
+        }
+
+        return "userCommentInit";
+    }
+
+    @PostMapping("/addComment")
+    public String addComment(@RequestParam Long userId, @RequestParam Long postId, @RequestParam String message, HttpSession session) {
+        MyProfile myProfile = (MyProfile) session.getAttribute("myProfile");
+
+        if (myProfile != null) {
+            User user = findUserById(userId);
+            if (user != null) {
+                UserDiary userDiary = user.getDiary();
+                UserPost post = userDiary.findPostById(postId);
+
+                if (post != null) {
+                    User tmp = findUserById(myProfile.Id);
+                    post.addComment(tmp, message);
+                    _userData.save(user);
+                }
+            }
+            return "redirect:/init/user/" + userId + "/comm/" + postId;
+        } else {
+            return "redirect:/loginForm";
+        }
+    }
+
+
+    @PostMapping("/likeComment")
+    public String likeComment(@RequestParam Long commId, @RequestParam Long userId, @RequestParam Long postId, HttpSession session) {
+        MyProfile myProfile = (MyProfile) session.getAttribute("myProfile");
+        User user = findUserById(userId);
+        if (user != null) {
+            UserPost post = user.getDiary().findPostById(postId);
+            if (post != null) {
+                User tmp = findUserById(myProfile.Id);
+                post.LikeComment(commId, tmp);
+                _userData.save(user);
+                return "redirect:/init/user/" + userId + "/comm/" + postId;
+            }
+        }
+        return "redirect:/homePage";
+    }
+
+    @PostMapping("/unlikeComment")
+    public String unlikeComment(@RequestParam Long commId, @RequestParam Long userId, @RequestParam Long postId, HttpSession session) {
+        MyProfile myProfile = (MyProfile) session.getAttribute("myProfile");
+        User user = findUserById(userId);
+        if (user != null) {
+            UserPost post = user.getDiary().findPostById(postId);
+            if (post != null) {
+                User tmp = findUserById(myProfile.Id);
+                post.UnlikeComment(commId, tmp);
+                _userData.save(user);
+                return "redirect:/init/user/" + userId + "/comm/" + postId;
+            }
+        }
+        return "redirect:/homePage";
+    }
+
 }

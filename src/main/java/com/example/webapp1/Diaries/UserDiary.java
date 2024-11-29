@@ -29,8 +29,6 @@ public class UserDiary implements IDiary {
         return sortedPosts;
     }
 
-
-
     @Override
     public void addPost(UserPost post) {
         this.posts.add(post);
@@ -65,7 +63,7 @@ public class UserDiary implements IDiary {
         }
     }
 
-    private UserPost findPostById(Long postId) {
+    public UserPost findPostById(Long postId) {
         for (UserPost post : posts) {
             if (post.getId() == postId) {
                 return post;

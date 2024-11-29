@@ -14,7 +14,8 @@
         <p th:text="'Дата: ' + ${post.date}"></p>
         <p th:text="'Время: ' + ${post.time}"></p>
         <p th:text="${post.message}"></p>
-        <p th:text="${post.likesCount}"></p>
+        <p th:text="'Лайки: ' + ${post.likesCount}"></p>
+        <a th:href="@{/notinit/user/{id}/comm/{postId}(id=${userId}, postId=${post.id})}">Комментарии</a>
     </li>
 </ul>
 

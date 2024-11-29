@@ -6,7 +6,7 @@ public interface IPost {
     String getDate();
     String getTime();
     String getMessage();
-    int getId();
+    Long getId();
 
     boolean hasLiked(User user);
     void likePost(User user);

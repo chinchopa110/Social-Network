@@ -14,7 +14,7 @@
         <p th:text="'Дата: ' + ${post.date}"></p>
         <p th:text="'Время: ' + ${post.time}"></p>
         <p th:text="${post.message}"></p>
-        <p th:text="${post.likesCount}"></p>
+        <p th:text="'Лайки: ' + ${post.likesCount}"></p>
 
         <form th:action="@{/likePost}" method="post">
             <input type="hidden" th:name="postId" th:value="${post.id}"/>
@@ -28,6 +28,7 @@
             <button type="submit">Убрать лайк</button>
         </form>
 
+        <a th:href="@{/init/user/{id}/comm/{postId}(id=${userId}, postId=${post.id})}">Комментарии</a>
     </li>
 </ul>
 

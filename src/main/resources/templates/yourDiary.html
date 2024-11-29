@@ -16,6 +16,7 @@
             <p th:text="'Время: ' + ${post.time}"></p>
             <p th:text="${post.message}"></p>
             <p th:text="${post.likesCount}"></p>
+            <a th:href="@{/init/user/{id}/comm/{postId}(id=${MyId}, postId=${post.id})}">Комментарии</a>
 
             <form th:action="@{/removePost}" method="post">
                 <input type="hidden" th:value="${iterStat.index}" name="postIndex"/>

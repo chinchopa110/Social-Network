@@ -14,7 +14,7 @@ import java.util.List;
 public class UserComment implements IResponse, IPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private final String date;
     private final String time;
     private final String message;
@@ -77,10 +77,11 @@ public class UserComment implements IResponse, IPost {
         return likesCount;
     }
     @Override
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
+    @Override
     public boolean hasLiked(User user) {
         for (UserLike userLike : likes) {
             if (userLike != null && userLike.getUser() != null && userLike.getUser().equals(user)) {

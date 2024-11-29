@@ -7,6 +7,7 @@ import com.example.webapp1.Diaries.Posts.UserPostService.UserPostComparator;
 import com.example.webapp1.Users.Domain.User;
 import jakarta.persistence.*;
 
+import javax.xml.stream.events.Comment;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +18,7 @@ import java.util.List;
 public class UserPost implements IPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private final String title;
     private final String date;
     private final String time;
@@ -93,7 +94,7 @@ public class UserPost implements IPost {
     }
 
     @Override
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -123,6 +124,24 @@ public class UserPost implements IPost {
         }
     }
 
+    public void LikeComment(Long commentId, User user){
+        UserComment userComment = findCommentById(commentId);
+        if (userComment != null) {
+            if(!userComment.hasLiked(user)) {
+                userComment.likePost(user);
+            }
+        }
+    }
+
+    public void UnlikeComment(Long commentId, User user){
+        UserComment userComment = findCommentById(commentId);
+        if (userComment != null) {
+            if(userComment.hasLiked(user)) {
+                userComment.unlikePost(user);
+            }
+        }
+    }
+
     public void addComment(User user, String comment) {
         comments.add(new UserComment(user, comment));
     }
@@ -133,5 +152,14 @@ public class UserPost implements IPost {
         sortedComments.sort(new UserPostComparator());
 
         return sortedComments;
+    }
+
+    private UserComment findCommentById(Long commentId) {
+        for (UserComment userComment : comments) {
+            if (userComment.getId() == commentId) {
+                return userComment;
+            }
+        }
+        return null;
     }
 }
