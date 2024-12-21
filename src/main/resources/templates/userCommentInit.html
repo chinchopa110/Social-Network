@@ -3,43 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <title>Комментарии</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #b5c7f6;
+    }
+    .comment-section {
+      margin: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .comment {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .comment h3 {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
-<h2>Комментарии:</h2>
+<div class="container">
+  <h2>Комментарии:</h2>
 
-<form th:action="@{/addComment}" method="post">
-  <input type="hidden" th:name="userId" th:value="${user.id}"/>
-  <input type="hidden" th:name="postId" th:value="${postId}"/>
-  <label>
-    <textarea th:name="message" placeholder="Введите ваш комментарий..." required></textarea>
-  </label>
-  <button type="submit">Добавить комментарий</button>
-</form>
+  <form th:action="@{/addComment}" method="post" class="mb-4">
+    <input type="hidden" th:name="userId" th:value="${user.id}"/>
+    <input type="hidden" th:name="postId" th:value="${postId}"/>
+    <div class="form-group">
+      <label for="message">Ваш комментарий:</label>
+      <textarea id="message" th:name="message" class="form-control" placeholder="Введите ваш комментарий..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+  </form>
 
-<ul>
-  <li th:each="comm : ${comments}">
-    <h3 th:text="${comm.getUser().getName()}"></h3>
-    <p th:text="'Дата: ' + ${comm.date}"></p>
-    <p th:text="'Время: ' + ${comm.time}"></p>
-    <p th:text="${comm.message}"></p>
-    <p th:text="'Лайки: ' + ${comm.likesCount}"></p>
+  <ul class="list-unstyled">
+    <li th:each="comm : ${comments}" class="comment-section">
+      <div class="comment">
+        <h3 th:text="${comm.getUser().getName()}"></h3>
+        <p th:text="'Дата: ' + ${comm.date}"></p>
+        <p th:text="'Время: ' + ${comm.time}"></p>
+        <p th:text="${comm.message}"></p>
+        <p th:text="'Лайки: ' + ${comm.likesCount}"></p>
 
-    <form th:action="@{/likeComment}" method="post">
-      <input type="hidden" th:name="commId" th:value="${comm.id}"/>
-      <input type="hidden" th:name="userId" th:value="${user.id}"/>
-      <input type="hidden" th:name="postId" th:value="${postId}"/>
-      <button type="submit">Лайк</button>
-    </form>
+        <form th:action="@{/likeComment}" method="post" class="d-inline">
+          <input type="hidden" th:name="commId" th:value="${comm.id}"/>
+          <input type="hidden" th:name="userId" th:value="${user.id}"/>
+          <input type="hidden" th:name="postId" th:value="${postId}"/>
+          <button type="submit" class="btn btn-success btn-sm">Лайк</button>
+        </form>
 
-    <form th:action="@{/unlikeComment}" method="post">
-      <input type="hidden" th:name="commId" th:value="${comm.id}"/>
-      <input type="hidden" th:name="userId" th:value="${user.id}"/>
-      <input type="hidden" th:name="postId" th:value="${postId}"/>
-      <button type="submit">Убрать лайк</button>
-    </form>
-  </li>
-</ul>
+        <form th:action="@{/unlikeComment}" method="post" class="d-inline">
+          <input type="hidden" th:name="commId" th:value="${comm.id}"/>
+          <input type="hidden" th:name="userId" th:value="${user.id}"/>
+          <input type="hidden" th:name="postId" th:value="${postId}"/>
+          <button type="submit" class="btn btn-danger btn-sm">Убрать лайк</button>
+        </form>
+      </div>
+    </li>
+  </ul>
 
-<a th:href="@{/init/user/{id}(id=${user.id})}">Назад</a>
+  <a th:href="@{/init/user/{id}(id=${user.id})}" class="btn btn-secondary">Назад</a>
+</div>
 </body>
 </html>

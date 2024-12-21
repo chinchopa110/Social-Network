@@ -3,22 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Дневник пользователя</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #b5c7f6;
+        }
+        .post-section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .post h3 {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-<h1>Дневник пользователя: <span th:text="${userName}"></span></h1>
+<div class="container">
+    <h1>Дневник пользователя: <span th:text="${userName}"></span></h1>
 
-<h2>Записи:</h2>
-<ul>
-    <li th:each="post : ${diary}">
-        <h3 th:text="${post.title}"></h3>
-        <p th:text="'Дата: ' + ${post.date}"></p>
-        <p th:text="'Время: ' + ${post.time}"></p>
-        <p th:text="${post.message}"></p>
-        <p th:text="'Лайки: ' + ${post.likesCount}"></p>
-        <a th:href="@{/notinit/user/{id}/comm/{postId}(id=${userId}, postId=${post.id})}">Комментарии</a>
-    </li>
-</ul>
+    <h2>Записи:</h2>
+    <ul class="list-unstyled">
+        <li th:each="post : ${diary}" class="post-section">
+            <div class="post">
+                <h3 th:text="${post.title}"></h3>
+                <p th:text="'Дата: ' + ${post.date}"></p>
+                <p th:text="'Время: ' + ${post.time}"></p>
+                <p th:text="${post.message}"></p>
+                <p th:text="'Лайки: ' + ${post.likesCount}"></p>
+                <a th:href="@{/notinit/user/{id}/comm/{postId}(id=${userId}, postId=${post.id})}" class="btn btn-info btn-sm">Комментарии</a>
+            </div>
+        </li>
+    </ul>
 
-<a href="/notinitapp">Назад</a>
+    <a href="/notinitapp" class="btn btn-secondary">Назад</a>
+</div>
 </body>
 </html>

@@ -3,17 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Инициализация</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #b5c7f6;
+        }
+    </style>
 </head>
 <body>
-    <h1>Выберите действие</h1>
-    <a href="/login">Войти</a>
-    <a href="/register">Зарегистрироваться</a>
+<div class="container mt-5">
+    <h1 class="text-center">Выберите действие</h1>
+    <div class="text-center mt-4">
+        <a href="/login" class="btn btn-secondary">Войти</a>
+        <a href="/register" class="btn btn-secondary">Зарегистрироваться</a>
+    </div>
 
-    <h2>Пользователи:</h2>
-    <ul>
-        <li th:each="user : ${users}">
+    <h2 class="mt-4">Пользователи:</h2>
+    <ul class="list-group">
+        <li class="list-group-item" th:each="user : ${users}">
             <a th:href="@{notinit/user/{id}(id=${user.Id})}" th:text="${user.Name}"></a>
         </li>
     </ul>
+</div>
 </body>
 </html>

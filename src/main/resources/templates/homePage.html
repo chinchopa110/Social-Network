@@ -3,16 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Главная</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #b5c7f6; /* Бледно-голубой цвет */
+        }
+    </style>
 </head>
 <body>
-<h1>Ваш дневник:</h1>
-<a href="/yourDiary">Дневник</a>
+<div class="container mt-5">
+    <h1 class="text-center">Ваш дневник:</h1>
+    <div class="text-center mb-4">
+        <a href="/yourDiary" class="btn btn-primary">Дневник</a>
+    </div>
 
-<h2>Дневники пользователей:</h2>
-<ul>
-    <li th:each="user : ${users}" th:if="${user.id} != ${myProfile.Id}">
-        <a th:href="@{init/user/{id}(id=${user.id})}" th:text="${user.Name}"></a>
-    </li>
-</ul>
+    <h2>Дневники пользователей:</h2>
+    <ul class="list-group">
+        <li class="list-group-item" th:each="user : ${users}" th:if="${user.id} != ${myProfile.Id}">
+            <a th:href="@{init/user/{id}(id=${user.id})}" th:text="${user.Name}" class="text-decoration-none"></a>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

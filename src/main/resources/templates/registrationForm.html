@@ -3,24 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>Регистрация</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #b5c7f6; /* Бледно-голубой цвет */
+    }
+  </style>
 </head>
 <body>
-<h1>Регистрация</h1>
+<div class="container mt-5">
+  <h1 class="text-center">Регистрация</h1>
 
-<div th:if="${error}" style="color: red;">
-  <p th:text="${error}"></p>
+  <div th:if="${error}" class="text-danger">
+    <p th:text="${error}"></p>
+  </div>
+
+  <form action="#" th:action="@{/register}" method="post" class="mt-4">
+    <div class="form-group">
+      <label for="name">Имя:</label>
+      <input type="text" class="form-control" id="name" name="name" required />
+    </div>
+    <div class="form-group">
+      <label for="password">Пароль:</label>
+      <input type="password" class="form-control" id="password" name="password" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+  </form>
+
+  <a href="/notinitapp" class="d-block mt-3">Назад</a>
 </div>
-
-<form action="#" th:action="@{/register}" method="post">
-  <label for="name">Имя:</label>
-  <input type="text" id="name" name="name" required />
-
-  <label for="password">Пароль:</label>
-  <input type="password" id="password" name="password" required />
-
-  <button type="submit">Зарегистрироваться</button>
-</form>
-
-<a href="/notinitapp">Назад</a>
 </body>
 </html>

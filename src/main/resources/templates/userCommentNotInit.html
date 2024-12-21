@@ -3,19 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <title>Комментарии</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #b5c7f6;
+    }
+    .comment-section {
+      margin: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .comment {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .comment h3 {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
-<h2>Комментарии:</h2>
-<ul>
-  <li th:each="comm : ${comments}">
-    <h3 th:text="${comm.getUser().getName()}"></h3>
-    <p th:text="'Дата: ' + ${comm.date}"></p>
-    <p th:text="'Время: ' + ${comm.time}"></p>
-    <p th:text="${comm.message}"></p>
-    <p th:text="'Лайки: ' + ${comm.likesCount}"></p>
-  </li>
-</ul>
+<div class="container">
+  <h2>Комментарии:</h2>
+  <ul class="list-unstyled">
+    <li th:each="comm : ${comments}" class="comment-section">
+      <div class="comment">
+        <h3 th:text="${comm.getUser().getName()}"></h3>
+        <p th:text="'Дата: ' + ${comm.date}"></p>
+        <p th:text="'Время: ' + ${comm.time}"></p>
+        <p th:text="${comm.message}"></p>
+        <p th:text="'Лайки: ' + ${comm.likesCount}"></p>
+      </div>
+    </li>
+  </ul>
 
-<a th:href="@{/notinit/user/{id}(id=${user.id})}">Назад</a>
+  <a th:href="@{/notinit/user/{id}(id=${user.id})}" class="btn btn-secondary">Назад</a>
+</div>
 </body>
 </html>
